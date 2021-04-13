@@ -112,8 +112,16 @@ if [[ "$answer" =~ "y" ]] || [[ "$answer" =~ "Y" ]]; then
     curl -sL "${URL_INTERFACES}" > "${FILE_INTERFACES}";
 fi
 
-info "Restarting NetworkManager"
-systemctl restart "${SERVICE_NM}"
+info "Restart NetworkManager? [N/y] "
+warn "This will interrupt any remote connections including SSH."
+warn "You can restart later by running:"
+warn "sudo systemctl restart NetworkManager.service"
+echo ""
+read answer < /dev/tty
+if [[ "$answer" =~ "y" ]] || [[ "$answer" =~ "Y" ]]; then
+    info "Restarting NetworkManager"
+    systemctl restart "${SERVICE_NM}"
+fi
 
 # Parse command line parameters
 while [[ $# -gt 0 ]]; do
